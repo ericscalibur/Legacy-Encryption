@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigenère Cipher - Encrypt</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input, textarea { width: 100%; margin-bottom: 10px; padding: 10px; }
+        button { padding: 10px 15px; }
+    </style>
+</head>
+<body>
+
+<h1>Vigenère Cipher - Encrypt</h1>
+
+<label for="key1">User 1 Key:</label>
+<input type="text" id="key1" required>
+
+<label for="key2">User 2 Key:</label>
+<input type="text" id="key2" required>
+
+<label for="plaintext">Plaintext Message:</label>
+<textarea id="plaintext" rows="4" required></textarea>
+
+<button onclick="encryptMessage()">Encrypt</button>
+
+<h2>Encrypted Message:</h2>
+<p id="ciphertext"></p>
+
+<script>
+function encryptMessage() {
+    const key1 = document.getElementById("key1").value;
+    const key2 = document.getElementById("key2").value;
+    const plaintext = document.getElementById("plaintext").value;
+
+    // Combine keys
+    const combinedKey = key1 + key2;
+
+    // Encrypting logic
+    let ciphertext = "";
+    let keyIndex = 0;
+
+    for (let i = 0; i < plaintext.length; i++) {
+        let char = plaintext[i];
+        if (char.match(/[a-zA-Z]/)) {
+            let shift = combinedKey[keyIndex % combinedKey.length].toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0);
+            if (char >= 'A' && char <= 'Z') {
+                ciphertext += String.fromCharCode((char.charCodeAt(0) - 'A'.charCodeAt(0) + shift) % 26 + 'A'.charCodeAt(0));
+            } else {
+                ciphertext += String.fromCharCode((char.charCodeAt(0) - 'a'.charCodeAt(0) + shift) % 26 + 'a'.charCodeAt(0));
+            }
+            keyIndex++;
+        } else {
+            ciphertext += char; // Non-alphabetic characters remain unchanged
+        }
+    }
+
+    document.getElementById("ciphertext").innerText = ciphertext;
+}
+</script>
+
+</body>
+</html>
